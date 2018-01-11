@@ -1,0 +1,125 @@
+set nocompatible              " required                                                                                                
+filetype off                  " required
+set pastetoggle=<F11>
+set cursorline
+
+
+
+
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+" Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+" Enable folding
+set foldmethod=indent
+set foldlevel=99
+
+" Enable folding with the spacebar
+nnoremap <space> za
+
+Plugin 'scrooloose/nerdcommenter'
+let mapleader =","
+
+" auto add follow content to python file
+autocmd BufNewFile *py exec ":call SetPythonTitle()"
+func SetPythonTitle()
+        call setline(1,"#!/usr/bin/env python")
+        call append( line("."),"#-*- coding: utf-8 -*-" )
+        call append(line(".")+1," ")
+        call append(line(".")+2, "\# File Name: ".expand("%"))
+        call append(line(".")+3, "\# Author: YourName")
+        call append(line(".")+4, "\# mail: YourEmail")
+        call append(line(".")+5, "\# Created Time: ".strftime("%Y-%m-%d",localtime()))
+endfunc
+
+
+
+au BufNewFile,BufRead *.py
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set textwidth=79 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set fileformat=unix
+
+Plugin 'tmhedberg/SimpylFold'
+
+"自动缩进
+Plugin 'vim-scripts/indentpython.vim'
+
+highlight BadWhitespace ctermbg=red guibg=darkred
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+set encoding=utf-8
+
+Bundle 'Valloric/YouCompleteMe'
+
+let g:ycm_global_ycm_extra_conf ='~/.vim/.ycm_extra_conf.py'
+let g:ycm_path_to_python_interpreter='/usr/bin/python'
+autocmd CompleteDone * pclose   " 选定函数后自动关闭说明
+
+"语法检查
+Plugin 'scrooloose/syntastic'
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+
+let g:syntastic_error_symbol='✗'
+let g:syntastic_warning_symbol='►'
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+
+Plugin 'nvie/vim-flake8'
+let python_highlight_all=1
+syntax on
+
+Plugin 'scrooloose/nerdtree'
+
+" 设置NerdTree
+" 在 vim 启动的时候默认开启 NERDTree（autocmd 可以缩写为 au）
+" F3开启和关闭NERDTree
+autocmd VimEnter * NERDTree
+wincmd w
+autocmd VimEnter * wincmd w
+map <F3> :NERDTreeMirror<CR>
+map <F3> :NERDTreeToggle<CR>
+Plugin 'jistr/vim-nerdtree-tabs'
+
+set nu
+set clipboard=unnamed
+
+
+
+Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+
+set belloff=all "所有事件下不发出声音
+
+" 不出现swf文件
+set shortmess+=A
+" 一些我习惯的快捷键配置
+ 
+nnoremap <leader>gf :YcmCompleter GoTo<CR>  
+
+
+" <F5> 运行python程序  "map <F5> :w<CR>: !python %<CR>
+map <F5> :w<CR>: !python %<CR>
+
+" <F1> vim放大<F2>缩小
+map <F1> :vertical resize +10<CR>
+map <F2> :vertical resize -10<CR>
+map <F4> :se nu!<CR>
